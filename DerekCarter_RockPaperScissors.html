@@ -23,7 +23,13 @@
         return text.charAt(0).toUpperCase() + text.slice(1);
     }
    
-    function game(){
+    
+    function game(playerSelection){
+        if (!playerSelection) return;
+        computerSelection = computerPlay();
+        const container = document.querySelector('#Results');
+        const content = document.createElement('p');
+        playRound(playerSelection, computerSelection);
         function playRound(playerSelection, computerSelection){
             var play = capitalizeFirst(playerSelection);
             var comp = capitalizeFirst(computerSelection);
@@ -31,62 +37,69 @@
             if (play == 'Rock'){
                 if (comp == 'Paper'){
                     computerWins++;
-                    return "You Lose! " + comp + " beats " + play + "."
+                    content.textContent = comp + " beats " + play + ". Player-" + playerWins + ", Computer-" + computerWins;
                 }
                 else if (comp == 'Rock'){
-                    return "Tie! Try Again."
+                    content.textContent =  "Tie! Try Again. Player-" + playerWins + ", Computer-" + computerWins;
                 }
                 else if (comp == 'Scissors'){
                     playerWins++;
-                    return "You Win! " + play + " beats " + comp + "."
+                    content.textContent = play + " beats " + comp + ". Player-" + playerWins + ", Computer-" + computerWins;
                 }
             }
             else if (play == 'Paper'){
                 if (comp == 'Scissors'){
                     computerWins++;
-                    return "You Lose! " + comp + " beats " + play + "."
+                    content.textContent = comp + " beats " + play + ". Player-" + playerWins + ", Computer-" + computerWins;
                 }
                 else if (comp == 'Paper'){
-                    return "Tie! Try Again."
+                    content.textContent = "Tie! Try Again. Player-" + playerWins + ", Computer-" + computerWins;
                 }
                 else if (comp == 'Rock'){
                     playerWins++;
-                    return "You Win! " + play + " beats " + comp + "."
+                    content.textContent = play + " beats " + comp + ". Player-" + playerWins + ", Computer-" + computerWins;
                 }
             }
             else if (play == 'Scissors'){
                 if (comp == 'Rock'){
                     computerWins++;
-                    return "You Lose! " + comp + " beats " + play + "."
+                    content.textContent = comp + " beats " + play + ". Player-" + playerWins + ", Computer-" + computerWins;
                 }
                 else if (comp == 'Scissors'){
-                    return "Tie! Try Again."
+                    content.textContent = "Tie! Try Again. Player-" + playerWins + ", Computer-" + computerWins;
                 }
                 else if (comp == 'Paper'){
                     playerWins++;
-                    return "You Win! " + play + " beats " + comp + "."
+                    content.textContent = play + " beats " + comp + ". Player-" + playerWins + ", Computer-" + computerWins;
+                    
                 }
             }
         }
-        var playerWins = 0;
-        var computerWins = 0;
-
-        for (i = 0; i <= 4; i++){
-            var computerSelection = computerPlay();
-            var playerSelection = prompt("Enter rock, paper or scissors");
-            console.log(playRound(playerSelection, computerSelection));
-        }  
-
-        if (playerWins > computerWins){
-            console.log("Congratulations! You won the best of 5.")
+        if(playerWins == 5){
+            content.textContent = "You've won by being the first to 5!";
         }
-        else {
-            console.log("Sorry! You lost the best of 5.")
+        else if(computerWins == 5){
+            content.textContent = "The computer beat you by being the first to 5!";
         }
-    }
 
-       
+        container.appendChild(content);
+    }  
+    var playerSelection = "";
+    var playerWins = 0;
+    var computerWins = 0;
 
-    game();
-
+    //listen for a user to click and pass the id of the button 
+    window.addEventListener("click", event => {
+        if(event.target.nodeName == "BUTTON"){
+            playerSelection = event.target.id;
+            game(playerSelection);
+        }
+    });
 </script>
+
+<body> 
+    <button id="Rock">Rock</button>
+    <button id="Paper">Paper</button>
+    <button id="Scissors">Scissors</button>
+    <div id="Results"></div>
+</body>
